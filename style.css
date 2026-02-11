@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+
+    /* colourful background */
+    background: linear-gradient(135deg, #ff6ec4, #7873f5, #ff9a9e);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* BIG TITLE */
+.title {
+    font-size: 60px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 20px rgba(255,255,255,0.8);
+    margin-bottom: 20px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 450px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+/* MESSAGE STYLE */
+#message {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ff1493;
+    min-height: 120px;
+}
+
+/* BUTTONS */
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    margin: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.yes-btn {
+    background: #28a745;
+    color: white;
+}
+
+.no-btn {
+    background: #dc3545;
+    color: white;
+}
+
+/* RESULT TEXT */
+#result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.hidden {
+    display: none;
+}
