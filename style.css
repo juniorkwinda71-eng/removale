@@ -11,56 +11,57 @@ body {
     justify-content: center;
     align-items: center;
 
-    padding: 20px;
+    padding: 15px;
     box-sizing: border-box;
 }
 
 /* BIG TITLE */
 .title {
-    font-size: 60px;
+    font-size: 32px; /* smaller like phone */
     font-weight: bold;
     color: white;
-    text-shadow: 0 0 20px rgba(255,255,255,0.8);
-    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(255,255,255,0.8);
+    margin-bottom: 15px;
     text-align: center;
 }
 
-/* CARD */
+/* CARD — PHONE SIZE */
 .card {
     background: white;
-    padding: 40px;
+    padding: 25px;
     border-radius: 20px;
-    width: 100%;
-    max-width: 450px; /* fits phone */
+
+    width: 320px;        /* phone width */
+    max-width: 95vw;     /* never overflow screen */
+
     text-align: center;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
 /* MESSAGE STYLE */
 #message {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
     color: #ff1493;
-    min-height: 120px;
+    min-height: 100px;
+}
+
+/* BUTTON AREA */
+#choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* BUTTONS */
 button {
-    padding: 12px 25px;
+    padding: 12px;
     border: none;
     border-radius: 10px;
-    margin: 10px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    width: 45%;
-}
-
-/* mobile button layout */
-#choices {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
 .yes-btn {
@@ -75,33 +76,13 @@ button {
 
 /* RESULT TEXT */
 #result {
-    margin-top: 20px;
-    font-size: 20px;
+    margin-top: 15px;
+    font-size: 18px;
     font-weight: bold;
     color: #333;
 }
 
 .hidden {
     display: none;
-}
-
-/* ---------- MOBILE FIXES ---------- */
-@media (max-width: 500px) {
-
-    .title {
-        font-size: 38px;
-    }
-
-    .card {
-        padding: 25px;
-    }
-
-    #message {
-        font-size: 18px;
-    }
-
-    button {
-        width: 100%;
-    }
 }
 
