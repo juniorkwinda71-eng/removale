@@ -7,6 +7,14 @@ const text = "I know you said yess my baby🥺❤️ I just wanted to let you kn
 let index = 0;
 const speed = 50;
 
+// when cover YES clicked
+function startMessage() {
+    document.getElementById("coverCard").classList.add("hidden");
+    document.getElementById("mainCard").classList.remove("hidden");
+    typeMessage();
+}
+
+// typing effect
 function typeMessage() {
     if (index < text.length) {
         document.getElementById("message").innerHTML += text.charAt(index);
@@ -17,9 +25,6 @@ function typeMessage() {
         showSavedAnswer();
     }
 }
-
-// start typing when page loads
-window.onload = typeMessage;
 
 // save answer
 function selectAnswer(answer) {
