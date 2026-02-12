@@ -2,30 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<!-- IMPORTANT FOR PHONE RESPONSIVE -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Rati madela ❤️</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- TITLE OUTSIDE CARD -->
 <h1 class="title">Rati madela ❤️</h1>
 
-<!-- CARD -->
-<div class="card">
+<!-- COVER CARD (FIRST SCREEN) -->
+<div id="coverCard" class="card">
+    <p style="font-size:22px;font-weight:bold;color:#ff1493;">
+        May you be my valentine ❤️🥺🌹
+    </p>
+
+    <button class="yes-btn" onclick="startMessage()">Yes ❤️</button>
+</div>
+
+<!-- MAIN MESSAGE CARD (HIDDEN FIRST) -->
+<div id="mainCard" class="card hidden">
     <p id="message"></p>
 
-    <!-- OPTIONS -->
     <div id="choices" class="hidden">
         <button class="yes-btn" onclick="selectAnswer('YES ❤️')">Yes ❤️</button>
         <button class="no-btn" onclick="selectAnswer('NO 💔')">No 💔</button>
     </div>
 
-    <!-- RESULT DISPLAY -->
     <p id="result"></p>
 </div>
 
