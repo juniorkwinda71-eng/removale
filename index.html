@@ -18,18 +18,14 @@
     </p>
 
     <button class="yes-btn" onclick="startMessage()">Yes ❤️</button>
+    <button class="no-btn" onclick="showNo()">No 💔</button>
+
+    <p id="noResult"></p>
 </div>
 
 <!-- MAIN MESSAGE CARD (HIDDEN FIRST) -->
 <div id="mainCard" class="card hidden">
     <p id="message"></p>
-
-    <div id="choices" class="hidden">
-        <button class="yes-btn" onclick="selectAnswer('YES ❤️')">Yes ❤️</button>
-        <button class="no-btn" onclick="selectAnswer('NO 💔')">No 💔</button>
-    </div>
-
-    <p id="result"></p>
 </div>
 
 <script src="script.js"></script>
