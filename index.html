@@ -1,34 +1,847 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rati madela ❤️</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Junior K Better</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0b0e1a;--surface:#111827;--surface2:#1a2235;--surface3:#1e2a40;
+  --accent:#00e676;--accent2:#00b0ff;--accent3:#ff6d00;--accentPurple:#7c4dff;
+  --text:#f0f4ff;--muted:#6b7a99;--border:#1e2d4a;
+  --red:#ff4d4d;--yellow:#ffd600;--green:#00e676;--blue:#00b0ff;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#000;letter-spacing:.5px}
+.logo-text{font-size:17px;font-weight:700;letter-spacing:.3px}
+.logo-text span{color:var(--accent)}
+.header-right{display:flex;align-items:center;gap:8px}
+.pill{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--muted)}
+.live-dot{width:7px;height:7px;background:var(--red);border-radius:50%;display:inline-block;margin-right:5px;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* NAV */
+.nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex:1;min-width:80px;padding:13px 6px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap;letter-spacing:.3px}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-btn svg{display:block;margin:0 auto 4px;width:18px;height:18px}
+
+/* LAYOUT */
+.tab{display:none;padding:16px;max-width:900px;margin:0 auto}
+.tab.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.card-sm{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.card-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title svg{width:15px;height:15px}
+
+/* STAT TILES */
+.stat-tile{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.stat-tile .val{font-size:26px;font-weight:800;line-height:1;margin-bottom:4px}
+.stat-tile .lbl{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}
+.stat-tile .sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* INPUTS */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.field input,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;outline:none;transition:.2s}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,230,118,.08)}
+.field select option{background:var(--surface2)}
+
+/* FORM SELECTOR */
+.form-pills{display:flex;gap:6px;flex-wrap:wrap}
+.form-pill{width:32px;height:32px;border-radius:6px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+.fp-w{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.fp-d{background:rgba(255,214,0,.12);color:var(--yellow);border:1px solid rgba(255,214,0,.3)}
+.fp-l{background:rgba(255,77,77,.12);color:var(--red);border:1px solid rgba(255,77,77,.3)}
+.form-pill.active.fp-w{background:var(--green);color:#000}
+.form-pill.active.fp-d{background:var(--yellow);color:#000}
+.form-pill.active.fp-l{background:var(--red);color:#fff}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:14px;background:var(--accent);color:#000;font-weight:800;font-size:15px;border:none;border-radius:10px;cursor:pointer;letter-spacing:.5px;transition:.2s}
+.btn-primary:hover{background:#00ff85;transform:translateY(-1px)}
+.btn-primary:active{transform:scale(.98)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;transition:.2s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+
+/* PROB BARS */
+.prob-bar-row{margin-bottom:10px}
+.prob-bar-row .meta{display:flex;justify-content:space-between;margin-bottom:5px}
+.prob-bar-row .meta span:first-child{font-size:13px;color:var(--text)}
+.prob-bar-row .meta span:last-child{font-size:13px;font-weight:700}
+.bar-track{background:var(--surface3);border-radius:20px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:20px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.badge-green{background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.badge-yellow{background:rgba(255,214,0,.1);color:var(--yellow);border:1px solid rgba(255,214,0,.25)}
+.badge-red{background:rgba(255,77,77,.1);color:var(--red);border:1px solid rgba(255,77,77,.25)}
+.badge-blue{background:rgba(0,176,255,.1);color:var(--blue);border:1px solid rgba(0,176,255,.25)}
+.badge-purple{background:rgba(124,77,255,.1);color:var(--accentPurple);border:1px solid rgba(124,77,255,.25)}
+
+/* RECOMMENDATION BOX */
+.rec-box{background:linear-gradient(135deg,rgba(0,230,118,.08),rgba(0,176,255,.06));border:1px solid rgba(0,230,118,.25);border-radius:12px;padding:18px;margin-top:14px;text-align:center}
+.rec-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.rec-pick{font-size:22px;font-weight:800;color:var(--accent)}
+.rec-sub{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* GAUGE */
+.gauge-wrap{text-align:center;margin-bottom:14px}
+.gauge-num{font-size:42px;font-weight:900;line-height:1}
+.gauge-lbl{font-size:12px;color:var(--muted);margin-top:2px}
+.gauge-bar{height:6px;border-radius:3px;background:var(--surface3);margin:10px 0}
+.gauge-bar-fill{height:100%;border-radius:3px;transition:width 1s}
+
+/* CHART CONTAINER */
+.chart-wrap{position:relative;height:220px;margin-top:8px}
+.chart-wrap-tall{position:relative;height:280px;margin-top:8px}
+
+/* SECTION DIVIDER */
+.section-sep{height:1px;background:var(--border);margin:16px 0}
+
+/* TEAM HEADER */
+.match-header{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface2);border-radius:12px;margin-bottom:14px}
+.team-block{text-align:center;flex:1}
+.team-name{font-size:15px;font-weight:800}
+.team-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.vs-block{font-size:24px;font-weight:900;color:var(--muted);padding:0 12px}
+
+/* ODDS MARKET CARD */
+.market-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:.2s;text-align:center}
+.market-card:hover{border-color:var(--accent)}
+.market-card .mk-label{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+.market-card .mk-odd{font-size:22px;font-weight:900;color:var(--text)}
+.market-card .mk-impl{font-size:12px;color:var(--accent);margin-top:2px}
+.market-card .mk-payout{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* H2H TABLE */
+.h2h-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.h2h-row:last-child{border:none}
+.h2h-date{width:80px;color:var(--muted);font-size:11px}
+.h2h-teams{flex:1;font-weight:500}
+.h2h-score{font-weight:800;font-size:14px;padding:0 10px}
+.h2h-result{width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* HISTORY */
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;transition:.2s}
+.hist-item:hover{border-color:var(--border);background:var(--surface2)}
+.hist-match{font-size:15px;font-weight:700}
+.hist-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.hist-probs{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+
+/* PROGRESS RING */
+.ring-wrap{position:relative;width:90px;height:90px;margin:0 auto 8px}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-val{font-size:18px;font-weight:800}
+.ring-lbl{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* SCROLLABLE TABS on mobile */
+@media(max-width:480px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr}}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-state svg{width:48px;height:48px;opacity:.3;margin-bottom:12px}
+.empty-state p{font-size:14px}
+
+/* OVERROUND METER */
+.or-meter{margin-top:12px;padding:12px;background:var(--surface2);border-radius:10px;text-align:center}
+.or-val{font-size:28px;font-weight:900}
+.or-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* VALUE INDICATOR */
+.value-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.value-row:last-child{border:none}
+
+/* DIVIDER LABEL */
+.divider-label{display:flex;align-items:center;gap:10px;margin:16px 0 10px}
+.divider-label span{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;white-space:nowrap}
+.divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:var(--border)}
+</style>
+</head>
 <body>
 
-<h1 class="title">Rati madela ❤️</h1>
-
-<!-- COVER CARD (FIRST SCREEN) -->
-<div id="coverCard" class="card">
-    <p style="font-size:22px;font-weight:bold;color:#ff1493;">
-        May you be my valentine ❤️🥺🌹
-    </p>
-
-    <button class="yes-btn" onclick="startMessage()">Yes ❤️</button>
-    <button class="no-btn" onclick="showNo()">No 💔</button>
-
-    <p id="noResult"></p>
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-icon">JK</div>
+    <div>
+      <div class="logo-text">Junior K <span>Better</span></div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="pill"><span class="live-dot"></span>LIVE ENGINE</div>
+  </div>
 </div>
 
-<!-- MAIN MESSAGE CARD (HIDDEN FIRST) -->
-<div id="mainCard" class="card hidden">
-    <p id="message"></p>
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('predict',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>PREDICT
+  </button>
+  <button class="nav-btn" onclick="showTab('analysis',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>ANALYSIS
+  </button>
+  <button class="nav-btn" onclick="showTab('odds',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>ODDS
+  </button>
+  <button class="nav-btn" onclick="showTab('history',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M8 12h8M8 8h8M8 16h5"/></svg>HISTORY
+  </button>
+</nav>
+
+<!-- ======================== PREDICT ======================== -->
+<div id="tab-predict" class="tab active">
+
+  <div class="card">
+    <div class="card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      MATCH SETUP
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Home Team</label><input id="home" placeholder="e.g. Kaizer Chiefs"/></div>
+      <div class="field"><label>Away Team</label><input id="away" placeholder="e.g. Orlando Pirates"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>League</label>
+        <select id="league">
+          <option value="prem">Premier League</option>
+          <option value="laliga">La Liga</option>
+          <option value="bundesliga">Bundesliga</option>
+          <option value="seriea">Serie A</option>
+          <option value="ligue1">Ligue 1</option>
+          <option value="caf">CAF Champions</option>
+          <option value="psl">PSL (South Africa)</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="field"><label>Match Date</label><input type="date" id="matchdate"/></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">HOME TEAM STATS</div>
+    <div class="grid2">
+      <div class="field"><label>Wins (Last 10)</label><input type="number" id="hWins" placeholder="0–10" min="0" max="10"/></div>
+      <div class="field"><label>Draws (Last 10)</label><input type="number" id="hDraws" placeholder="0–10" min="0" max="10"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Goals Scored (Avg)</label><input type="number" id="hGF" placeholder="e.g. 1.8" step="0.1"/></div>
+      <div class="field"><label>Goals Conceded (Avg)</label><input type="number" id="hGA" placeholder="e.g. 0.9" step="0.1"/></div>
+    </div>
+    <div class="field">
+      <label>Recent Form — last 5 (click to toggle)</label>
+      <div class="form-pills" id="hForm">
+        <button class="form-pill fp-w active" onclick="toggleForm(this)">W</button>
+        <button class="form-pill fp-w active" onclick="toggleForm(this)">W</button>
+        <button class="form-pill fp-d" onclick="toggleForm(this)">D</button>
+        <button class="form-pill fp-w active" onclick="toggleForm(this)">W</button>
+        <button class="form-pill fp-l" onclick="toggleForm(this)">L</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">AWAY TEAM STATS</div>
+    <div class="grid2">
+      <div class="field"><label>Wins (Last 10)</label><input type="number" id="aWins" placeholder="0–10" min="0" max="10"/></div>
+      <div class="field"><label>Draws (Last 10)</label><input type="number" id="aDraws" placeholder="0–10" min="0" max="10"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Goals Scored (Avg)</label><input type="number" id="aGF" placeholder="e.g. 1.2" step="0.1"/></div>
+      <div class="field"><label>Goals Conceded (Avg)</label><input type="number" id="aGA" placeholder="e.g. 1.3" step="0.1"/></div>
+    </div>
+    <div class="field">
+      <label>Recent Form — last 5</label>
+      <div class="form-pills" id="aForm">
+        <button class="form-pill fp-w active" onclick="toggleForm(this)">W</button>
+        <button class="form-pill fp-d" onclick="toggleForm(this)">D</button>
+        <button class="form-pill fp-l" onclick="toggleForm(this)">L</button>
+        <button class="form-pill fp-l" onclick="toggleForm(this)">L</button>
+        <button class="form-pill fp-w active" onclick="toggleForm(this)">W</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">CONTEXTUAL FACTORS</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Home Advantage</label>
+        <select id="homeAdv">
+          <option value="strong">Strong (Top home record)</option>
+          <option value="normal" selected>Normal</option>
+          <option value="weak">Weak home form</option>
+          <option value="neutral">Neutral venue</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Match Importance</label>
+        <select id="importance">
+          <option value="high">High Stakes (Title/Relegation)</option>
+          <option value="normal" selected>Standard</option>
+          <option value="low">Low (Already decided)</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>Home Injuries</label>
+        <select id="hInj">
+          <option value="0">None</option>
+          <option value="1">Minor (1–2 players)</option>
+          <option value="2">Major (Key player out)</option>
+          <option value="3">Severe (Multiple key players)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Away Injuries</label>
+        <select id="aInj">
+          <option value="0">None</option>
+          <option value="1">Minor (1–2 players)</option>
+          <option value="2">Major (Key player out)</option>
+          <option value="3">Severe (Multiple key players)</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>H2H Home Wins (Last 5)</label><input type="number" id="h2hHome" placeholder="0–5" min="0" max="5"/></div>
+      <div class="field"><label>H2H Away Wins (Last 5)</label><input type="number" id="h2hAway" placeholder="0–5" min="0" max="5"/></div>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="runPrediction()">RUN PREDICTION ENGINE</button>
+  <div id="predResult" style="margin-top:16px"></div>
 </div>
 
-<script src="script.js"></script>
+<!-- ======================== ANALYSIS ======================== -->
+<div id="tab-analysis" class="tab">
+  <div id="analysisEmpty" class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-5"/></svg>
+    <p>Run a prediction first to see full analysis</p>
+  </div>
+  <div id="analysisFull" style="display:none">
+    <div id="analysisContent"></div>
+  </div>
+</div>
+
+<!-- ======================== ODDS ======================== -->
+<div id="tab-odds" class="tab">
+  <div class="card">
+    <div class="card-title">ODDS CALCULATOR & VALUE FINDER</div>
+    <div class="grid2">
+      <div class="field"><label>Home Win Odds (1)</label><input type="number" id="oddsH" placeholder="e.g. 2.10" step="0.01"/></div>
+      <div class="field"><label>Draw Odds (X)</label><input type="number" id="oddsD" placeholder="e.g. 3.30" step="0.01"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Away Win Odds (2)</label><input type="number" id="oddsA" placeholder="e.g. 3.50" step="0.01"/></div>
+      <div class="field"><label>Over 2.5 Goals</label><input type="number" id="oddsO25" placeholder="e.g. 1.80" step="0.01"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>BTTS Yes</label><input type="number" id="oddsBTTS" placeholder="e.g. 1.70" step="0.01"/></div>
+      <div class="field"><label>Stake (R)</label><input type="number" id="stake" placeholder="e.g. 100"/></div>
+    </div>
+    <button class="btn-primary" onclick="calcOdds()">CALCULATE VALUE</button>
+    <div id="oddsResult"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">STATS REFERENCE — TOP LEAGUES</div>
+    <div id="leagueChart"><div class="chart-wrap"><canvas id="leagueBarChart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ======================== HISTORY ======================== -->
+<div id="tab-history" class="tab">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="font-size:16px;font-weight:700">Prediction Log</div>
+    <button class="btn-outline" onclick="clearHistory()">Clear All</button>
+  </div>
+  <div id="historyList">
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M8 8h8M8 16h5"/></svg>
+      <p>No predictions yet</p>
+    </div>
+  </div>
+</div>
+
+<script>
+var history = [];
+try { history = JSON.parse(localStorage.getItem('jkb2_hist') || '[]'); } catch(e){}
+
+var lastResult = null;
+var leagueChartInst = null;
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'history') renderHistory();
+  if (name === 'odds') renderLeagueChart();
+  if (name === 'analysis') renderAnalysis();
+}
+
+function toggleForm(btn) {
+  var order = ['fp-w','fp-d','fp-l'];
+  var current = order.find(c => btn.classList.contains(c));
+  var idx = order.indexOf(current);
+  var next = order[(idx + 1) % 3];
+  btn.classList.remove(...order, 'active');
+  btn.classList.add(next);
+  btn.textContent = next === 'fp-w' ? 'W' : next === 'fp-d' ? 'D' : 'L';
+  if (next !== 'fp-l') btn.classList.add('active');
+}
+
+function getFormScore(containerId) {
+  var pills = document.querySelectorAll('#' + containerId + ' .form-pill');
+  var weights = [0.5, 0.7, 0.9, 1.1, 1.3], score = 0;
+  pills.forEach(function(p, i) {
+    var v = p.classList.contains('fp-w') ? 3 : p.classList.contains('fp-d') ? 1 : 0;
+    score += v * weights[i];
+  });
+  return score / (3 * (0.5+0.7+0.9+1.1+1.3));
+}
+
+function getFormArray(containerId) {
+  var pills = document.querySelectorAll('#' + containerId + ' .form-pill');
+  return Array.from(pills).map(p => p.classList.contains('fp-w') ? 'W' : p.classList.contains('fp-d') ? 'D' : 'L');
+}
+
+function runPrediction() {
+  var home = document.getElementById('home').value || 'Home Team';
+  var away = document.getElementById('away').value || 'Away Team';
+  var hW = +document.getElementById('hWins').value || 5;
+  var hD = +document.getElementById('hDraws').value || 2;
+  var hGF = +document.getElementById('hGF').value || 1.5;
+  var hGA = +document.getElementById('hGA').value || 1.0;
+  var aW = +document.getElementById('aWins').value || 4;
+  var aD = +document.getElementById('aDraws').value || 3;
+  var aGF = +document.getElementById('aGF').value || 1.2;
+  var aGA = +document.getElementById('aGA').value || 1.3;
+  var homeAdv = document.getElementById('homeAdv').value;
+  var importance = document.getElementById('importance').value;
+  var hInj = +document.getElementById('hInj').value;
+  var aInj = +document.getElementById('aInj').value;
+  var h2hH = +document.getElementById('h2hHome').value || 2;
+  var h2hA = +document.getElementById('h2hAway').value || 1;
+  var hFormScore = getFormScore('hForm');
+  var aFormScore = getFormScore('aForm');
+  var hFormArr = getFormArray('hForm');
+  var aFormArr = getFormArray('aForm');
+
+  var hStr = (hW/10)*0.35 + hFormScore*0.35 + ((hGF-hGA+3)/6)*0.3;
+  var aStr = (aW/10)*0.35 + aFormScore*0.35 + ((aGF-aGA+3)/6)*0.3;
+  var hAdvMap = {strong:.10,normal:.06,weak:.02,neutral:0};
+  hStr += hAdvMap[homeAdv];
+  var injPen = [0,.03,.07,.12];
+  hStr -= injPen[hInj]; aStr -= injPen[aInj];
+  var h2hT = h2hH + h2hA + 1;
+  hStr += (h2hH/h2hT)*0.08; aStr += (h2hA/h2hT)*0.08;
+  if (importance === 'high') { hStr *= 1.03; aStr *= 1.02; }
+  hStr = Math.max(.05, Math.min(.95, hStr));
+  aStr = Math.max(.05, Math.min(.95, aStr));
+
+  var tot = hStr + aStr;
+  var drawFactor = Math.min(.32, 0.22 + hD/30 + aD/30);
+  var homeP = (hStr/tot)*(1-drawFactor);
+  var drawP = drawFactor;
+  var awayP = (aStr/tot)*(1-drawFactor);
+  var pSum = homeP+drawP+awayP;
+  homeP/=pSum; drawP/=pSum; awayP/=pSum;
+
+  var xHomeG = (hGF+aGA)/2;
+  var xAwayG = (aGF+hGA)/2;
+  var xTotal = xHomeG+xAwayG;
+  var over25 = Math.min(.95, Math.max(.05, (xTotal-1.5)/3));
+  var over15 = Math.min(.96, Math.max(.1, (xTotal-0.8)/3.5));
+  var btts = Math.min(.92, Math.max(.05, (Math.min(hGF,2.5)/2.5)*(Math.min(aGF,2.5)/2.5)*1.2));
+  var dc1x = homeP+drawP;
+  var dcx2 = drawP+awayP;
+  var diff = Math.abs(homeP-awayP);
+  var confidence = Math.min(95, Math.max(45, Math.round(50+diff*80+(Math.max(hFormScore,aFormScore)-.5)*20)));
+
+  lastResult = {
+    home, away, homeP, drawP, awayP, over25, over15, btts, dc1x, dcx2,
+    confidence, xHomeG, xAwayG, xTotal, hFormScore, aFormScore,
+    hFormArr, aFormArr, hW, aW, hD, aD, hGF, hGA, aGF, aGA,
+    hInj, aInj, h2hH, h2hA
+  };
+
+  // Save history
+  history.unshift({
+    home, away,
+    homeP: (homeP*100).toFixed(1), drawP: (drawP*100).toFixed(1), awayP: (awayP*100).toFixed(1),
+    over25: (over25*100).toFixed(0), btts: (btts*100).toFixed(0),
+    confidence, date: new Date().toLocaleDateString('en-ZA'),
+    bestPick: homeP > awayP && homeP > 0.45 ? home + ' Win' : awayP > homeP && awayP > 0.38 ? away + ' Win' : over25 > 0.6 ? 'Over 2.5 Goals' : 'Draw'
+  });
+  if (history.length > 50) history.pop();
+  try { localStorage.setItem('jkb2_hist', JSON.stringify(history)); } catch(e){}
+
+  renderPredictResult(lastResult);
+}
+
+function renderPredictResult(r) {
+  var picks = [
+    {n: r.home+' Win', p: r.homeP, col:'#00e676'},
+    {n:'Draw', p: r.drawP, col:'#ffd600'},
+    {n: r.away+' Win', p: r.awayP, col:'#00b0ff'},
+    {n:'Over 2.5 Goals', p: r.over25, col:'#ff6d00'},
+    {n:'BTTS Yes', p: r.btts, col:'#7c4dff'},
+    {n:'Double Chance 1X', p: r.dc1x, col:'#00e5ff'},
+  ];
+  var best = picks.reduce((a,b) => b.p > a.p ? b : a);
+  var confColor = r.confidence >= 72 ? '#00e676' : r.confidence >= 58 ? '#ffd600' : '#ff4d4d';
+
+  var html = '';
+
+  // Match Header
+  html += '<div class="match-header">';
+  html += '<div class="team-block"><div class="team-name">'+r.home+'</div><div class="team-sub">HOME</div></div>';
+  html += '<div class="vs-block">VS</div>';
+  html += '<div class="team-block"><div class="team-name">'+r.away+'</div><div class="team-sub">AWAY</div></div>';
+  html += '</div>';
+
+  // Confidence + Stat tiles
+  html += '<div class="grid4" style="margin-bottom:14px">';
+  html += '<div class="stat-tile"><div class="val" style="color:'+confColor+'">'+r.confidence+'%</div><div class="lbl">Confidence</div></div>';
+  html += '<div class="stat-tile"><div class="val" style="color:#00b0ff">'+r.xHomeG.toFixed(1)+'</div><div class="lbl">Home xG</div></div>';
+  html += '<div class="stat-tile"><div class="val" style="color:#ff6d00">'+r.xAwayG.toFixed(1)+'</div><div class="lbl">Away xG</div></div>';
+  html += '<div class="stat-tile"><div class="val" style="color:#7c4dff">'+r.xTotal.toFixed(1)+'</div><div class="lbl">Total xG</div></div>';
+  html += '</div>';
+
+  // Probability bars
+  html += '<div class="card">';
+  html += '<div class="card-title">MATCH RESULT PROBABILITIES</div>';
+  var barItems = [
+    {label:r.home+' (1)', val:r.homeP, col:'#00e676'},
+    {label:'Draw (X)', val:r.drawP, col:'#ffd600'},
+    {label:r.away+' (2)', val:r.awayP, col:'#00b0ff'}
+  ];
+  barItems.forEach(function(b){
+    html += '<div class="prob-bar-row">';
+    html += '<div class="meta"><span>'+b.label+'</span><span style="color:'+b.col+'">'+(b.val*100).toFixed(1)+'%</span></div>';
+    html += '<div class="bar-track"><div class="bar-fill" style="width:'+(b.val*100).toFixed(1)+'%;background:'+b.col+'"></div></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Markets grid
+  html += '<div class="card">';
+  html += '<div class="card-title">ALL MARKETS</div>';
+  html += '<div class="grid3">';
+  var markets = [
+    {label:'Over 2.5 Goals', val:r.over25, col:'#ff6d00'},
+    {label:'Over 1.5 Goals', val:r.over15, col:'#ffab40'},
+    {label:'BTTS Yes', val:r.btts, col:'#7c4dff'},
+    {label:'Double Chance 1X', val:r.dc1x, col:'#00e5ff'},
+    {label:'Double Chance X2', val:r.dcx2, col:'#80d8ff'},
+    {label:'Away Win or Draw', val:r.dcx2, col:'#80cbc4'},
+  ];
+  markets.forEach(function(m){
+    html += '<div class="card-sm" style="text-align:center">';
+    html += '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">'+m.label+'</div>';
+    html += '<div style="font-size:22px;font-weight:800;color:'+m.col+'">'+(m.val*100).toFixed(1)+'%</div>';
+    html += '<div style="font-size:10px;color:var(--muted);margin-top:4px">'+(m.val>=.65?'HIGH PROB':m.val>=.5?'MODERATE':'LOW PROB')+'</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  // Top pick
+  html += '<div class="rec-box">';
+  html += '<div class="rec-label">⭐ Top Recommended Pick</div>';
+  html += '<div class="rec-pick">'+best.n+'</div>';
+  html += '<div class="rec-sub">'+(best.p*100).toFixed(1)+'% probability · Click Analysis tab for full breakdown</div>';
+  html += '</div>';
+
+  document.getElementById('predResult').innerHTML = html;
+  document.getElementById('predResult').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderAnalysis() {
+  if (!lastResult) {
+    document.getElementById('analysisEmpty').style.display = 'block';
+    document.getElementById('analysisFull').style.display = 'none';
+    return;
+  }
+  document.getElementById('analysisEmpty').style.display = 'none';
+  document.getElementById('analysisFull').style.display = 'block';
+  var r = lastResult;
+
+  var html = '<div class="match-header"><div class="team-block"><div class="team-name">'+r.home+'</div></div><div class="vs-block">ANALYSIS</div><div class="team-block"><div class="team-name">'+r.away+'</div></div></div>';
+
+  // Radar / Bar comparison
+  html += '<div class="card"><div class="card-title">TEAM COMPARISON</div><div class="chart-wrap-tall"><canvas id="radarChart"></canvas></div></div>';
+
+  // Probability doughnut
+  html += '<div class="card"><div class="card-title">OUTCOME DISTRIBUTION</div><div class="chart-wrap"><canvas id="doughnutChart"></canvas></div></div>';
+
+  // Goals probability chart
+  html += '<div class="card"><div class="card-title">GOALS MARKETS PROBABILITY</div><div class="chart-wrap"><canvas id="goalsChart"></canvas></div></div>';
+
+  // Form analysis
+  html += '<div class="card"><div class="card-title">FORM ANALYSIS (LAST 5)</div>';
+  html += '<div class="grid2">';
+  html += '<div><div style="font-size:12px;color:var(--muted);margin-bottom:8px">'+r.home+'</div>';
+  r.hFormArr.forEach(function(f){
+    var c = f==='W'?'badge-green':f==='D'?'badge-yellow':'badge-red';
+    html += '<span class="badge '+c+'" style="margin:2px">'+f+'</span>';
+  });
+  html += '<div style="font-size:13px;margin-top:8px">Score: <strong style="color:var(--accent)">'+(r.hFormScore*100).toFixed(0)+'/100</strong></div></div>';
+  html += '<div><div style="font-size:12px;color:var(--muted);margin-bottom:8px">'+r.away+'</div>';
+  r.aFormArr.forEach(function(f){
+    var c = f==='W'?'badge-green':f==='D'?'badge-yellow':'badge-red';
+    html += '<span class="badge '+c+'" style="margin:2px">'+f+'</span>';
+  });
+  html += '<div style="font-size:13px;margin-top:8px">Score: <strong style="color:var(--blue)">'+(r.aFormScore*100).toFixed(0)+'/100</strong></div></div>';
+  html += '</div></div>';
+
+  // Key stats table
+  html += '<div class="card"><div class="card-title">STATISTICAL BREAKDOWN</div>';
+  var rows = [
+    ['Win Rate (Last 10)', (r.hW/10*100).toFixed(0)+'%', (r.aW/10*100).toFixed(0)+'%'],
+    ['Draw Rate (Last 10)', (r.hD/10*100).toFixed(0)+'%', (r.aD/10*100).toFixed(0)+'%'],
+    ['Goals Scored (Avg)', r.hGF.toFixed(1), r.aGF.toFixed(1)],
+    ['Goals Conceded (Avg)', r.hGA.toFixed(1), r.aGA.toFixed(1)],
+    ['Goal Diff (Avg)', (r.hGF-r.hGA).toFixed(1), (r.aGF-r.aGA).toFixed(1)],
+    ['xG (Expected)', r.xHomeG.toFixed(2), r.xAwayG.toFixed(2)],
+    ['H2H Wins (Last 5)', r.h2hH, r.h2hA],
+  ];
+  html += '<table style="width:100%;border-collapse:collapse;font-size:13px">';
+  html += '<tr><th style="color:var(--muted);text-align:left;padding:6px 0;border-bottom:1px solid var(--border)">Stat</th>';
+  html += '<th style="color:var(--accent);text-align:center;padding:6px;border-bottom:1px solid var(--border)">'+r.home+'</th>';
+  html += '<th style="color:var(--blue);text-align:center;padding:6px;border-bottom:1px solid var(--border)">'+r.away+'</th></tr>';
+  rows.forEach(function(row){
+    html += '<tr><td style="padding:7px 0;color:var(--muted)">'+row[0]+'</td>';
+    html += '<td style="text-align:center;font-weight:700;color:var(--accent)">'+row[1]+'</td>';
+    html += '<td style="text-align:center;font-weight:700;color:var(--blue)">'+row[2]+'</td></tr>';
+  });
+  html += '</table></div>';
+
+  document.getElementById('analysisContent').innerHTML = html;
+
+  // Draw charts
+  setTimeout(function(){
+    var isDark = true;
+    var textCol = '#6b7a99';
+
+    // Radar
+    var rCtx = document.getElementById('radarChart');
+    if (rCtx) {
+      if (rCtx._chartInst) rCtx._chartInst.destroy();
+      rCtx._chartInst = new Chart(rCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Win Rate','Form','Attack','Defense','H2H','xG'],
+          datasets: [
+            {
+              label: r.home,
+              data: [r.hW/10*10, r.hFormScore*10, r.hGF/3*10, (3-r.hGA)/3*10, r.h2hH/(r.h2hH+r.h2hA+1)*10, r.xHomeG/3*10],
+              borderColor: '#00e676', backgroundColor: 'rgba(0,230,118,.15)', pointBackgroundColor: '#00e676', borderWidth: 2
+            },
+            {
+              label: r.away,
+              data: [r.aW/10*10, r.aFormScore*10, r.aGF/3*10, (3-r.aGA)/3*10, r.h2hA/(r.h2hH+r.h2hA+1)*10, r.xAwayG/3*10],
+              borderColor: '#00b0ff', backgroundColor: 'rgba(0,176,255,.15)', pointBackgroundColor: '#00b0ff', borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {legend:{labels:{color:textCol,font:{size:11}}}},
+          scales: {r:{ticks:{color:textCol,backdropColor:'transparent',font:{size:9}},grid:{color:'rgba(255,255,255,.05)'},pointLabels:{color:textCol,font:{size:11}},angleLines:{color:'rgba(255,255,255,.05)'}}}
+        }
+      });
+    }
+
+    // Doughnut
+    var dCtx = document.getElementById('doughnutChart');
+    if (dCtx) {
+      if (dCtx._chartInst) dCtx._chartInst.destroy();
+      dCtx._chartInst = new Chart(dCtx, {
+        type: 'doughnut',
+        data: {
+          labels: [r.home+' Win','Draw',r.away+' Win'],
+          datasets: [{
+            data: [(r.homeP*100).toFixed(1),(r.drawP*100).toFixed(1),(r.awayP*100).toFixed(1)],
+            backgroundColor: ['rgba(0,230,118,.8)','rgba(255,214,0,.8)','rgba(0,176,255,.8)'],
+            borderColor: ['#00e676','#ffd600','#00b0ff'], borderWidth: 2
+          }]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false, cutout:'65%',
+          plugins: {legend:{labels:{color:textCol,font:{size:11}}}}
+        }
+      });
+    }
+
+    // Goals bar
+    var gCtx = document.getElementById('goalsChart');
+    if (gCtx) {
+      if (gCtx._chartInst) gCtx._chartInst.destroy();
+      gCtx._chartInst = new Chart(gCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Over 1.5','Over 2.5','BTTS Yes','Double 1X','Double X2'],
+          datasets: [{
+            label: 'Probability %',
+            data: [(r.over15*100).toFixed(1),(r.over25*100).toFixed(1),(r.btts*100).toFixed(1),(r.dc1x*100).toFixed(1),(r.dcx2*100).toFixed(1)],
+            backgroundColor: ['rgba(255,171,64,.7)','rgba(255,109,0,.8)','rgba(124,77,255,.8)','rgba(0,229,255,.7)','rgba(128,203,196,.7)'],
+            borderRadius: 6, borderSkipped: false
+          }]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false, indexAxis:'y',
+          plugins:{legend:{display:false}},
+          scales:{
+            x:{ticks:{color:textCol,font:{size:10}},grid:{color:'rgba(255,255,255,.04)'},max:100},
+            y:{ticks:{color:textCol,font:{size:11}},grid:{display:false}}
+          }
+        }
+      });
+    }
+  }, 100);
+}
+
+function calcOdds() {
+  var oH = +document.getElementById('oddsH').value;
+  var oD = +document.getElementById('oddsD').value;
+  var oA = +document.getElementById('oddsA').value;
+  var oO25 = +document.getElementById('oddsO25').value;
+  var oBTTS = +document.getElementById('oddsBTTS').value;
+  var stake = +document.getElementById('stake').value || 100;
+
+  var items = [
+    {label:'Home Win (1)', odds:oH, col:'#00e676'},
+    {label:'Draw (X)', odds:oD, col:'#ffd600'},
+    {label:'Away Win (2)', odds:oA, col:'#00b0ff'},
+    {label:'Over 2.5 Goals', odds:oO25, col:'#ff6d00'},
+    {label:'BTTS Yes', odds:oBTTS, col:'#7c4dff'},
+  ].filter(i => i.odds > 1);
+
+  if (!items.length) return;
+
+  var html = '<div class="section-sep"></div>';
+  html += '<div class="divider-label"><span>IMPLIED PROBABILITIES</span></div>';
+  html += '<div class="grid3" style="margin-bottom:16px">';
+  items.forEach(function(it){
+    var impl = (1/it.odds*100).toFixed(1);
+    var payout = (stake*it.odds).toFixed(2);
+    html += '<div class="market-card"><div class="mk-label">'+it.label+'</div><div class="mk-odd" style="color:'+it.col+'">'+it.odds+'</div><div class="mk-impl">'+impl+'% implied</div><div class="mk-payout">Win: R'+payout+'</div></div>';
+  });
+  html += '</div>';
+
+  // Overround
+  var mainOdds = [oH,oD,oA].filter(o=>o>1);
+  if (mainOdds.length === 3) {
+    var or = mainOdds.reduce((s,o)=>s+1/o,0)*100;
+    var edge = (or-100).toFixed(1);
+    var edgeColor = +edge>8?'#ff4d4d':+edge>5?'#ffd600':'#00e676';
+    var edgeMsg = +edge>8?'High margin — poor value':+edge>5?'Average margin':'Low margin — good value';
+    html += '<div class="or-meter"><div class="or-val" style="color:'+edgeColor+'">'+(or.toFixed(1))+'%</div><div class="or-lbl">Bookmaker Overround · Edge: +'+edge+'%</div><div style="margin-top:6px"><span class="badge" style="'+(+edge>8?'background:rgba(255,77,77,.1);color:#ff4d4d;border:1px solid rgba(255,77,77,.25)':+edge>5?'background:rgba(255,214,0,.1);color:#ffd600;border:1px solid rgba(255,214,0,.25)':'background:rgba(0,230,118,.1);color:#00e676;border:1px solid rgba(0,230,118,.25)')+'">'+edgeMsg+'</span></div></div>';
+  }
+
+  // Value vs prediction
+  if (lastResult) {
+    html += '<div class="divider-label"><span>VALUE CHECK vs YOUR PREDICTION</span></div>';
+    var comparisons = [
+      {label:'Home Win', predP: lastResult.homeP, odds: oH},
+      {label:'Draw', predP: lastResult.drawP, odds: oD},
+      {label:'Away Win', predP: lastResult.awayP, odds: oA},
+      {label:'Over 2.5', predP: lastResult.over25, odds: oO25},
+      {label:'BTTS Yes', predP: lastResult.btts, odds: oBTTS},
+    ].filter(c => c.odds > 1);
+    html += '<div class="card" style="margin-top:0">';
+    comparisons.forEach(function(c){
+      var implP = 1/c.odds;
+      var value = c.predP - implP;
+      var isValue = value > 0.03;
+      var col = isValue ? '#00e676' : value < -0.05 ? '#ff4d4d' : '#ffd600';
+      html += '<div class="value-row">';
+      html += '<span style="font-size:13px">'+c.label+'</span>';
+      html += '<div style="display:flex;gap:8px;align-items:center">';
+      html += '<span style="font-size:12px;color:var(--muted)">Pred: '+(c.predP*100).toFixed(1)+'% · Impl: '+(implP*100).toFixed(1)+'%</span>';
+      html += '<span class="badge" style="background:'+(isValue?'rgba(0,230,118,.12)':'rgba(255,77,77,.1)')+';color:'+col+';border:1px solid '+col+'40">'+(isValue?'VALUE':'NO VALUE')+'</span>';
+      html += '</div></div>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('oddsResult').innerHTML = html;
+}
+
+function renderLeagueChart() {
+  var ctx = document.getElementById('leagueBarChart');
+  if (!ctx) return;
+  if (leagueChartInst) { leagueChartInst.destroy(); leagueChartInst = null; }
+  leagueChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Premier League','La Liga','Bundesliga','Serie A','Ligue 1','PSL'],
+      datasets: [
+        {label:'Home Win %', data:[46,44,47,43,44,48], backgroundColor:'rgba(0,230,118,.7)', borderRadius:4, borderSkipped:false},
+        {label:'Draw %', data:[25,27,23,29,26,28], backgroundColor:'rgba(255,214,0,.7)', borderRadius:4, borderSkipped:false},
+        {label:'Away Win %', data:[29,29,30,28,30,24], backgroundColor:'rgba(0,176,255,.7)', borderRadius:4, borderSkipped:false},
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#6b7a99',font:{size:11}}}},
+      scales:{
+        x:{ticks:{color:'#6b7a99',font:{size:10}},grid:{color:'rgba(255,255,255,.03)'}},
+        y:{ticks:{color:'#6b7a99',font:{size:10}},grid:{color:'rgba(255,255,255,.03)'},max:60}
+      }
+    }
+  });
+}
+
+function renderHistory() {
+  var el = document.getElementById('historyList');
+  if (!history.length) {
+    el.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M8 8h8M8 16h5"/></svg><p>No predictions yet</p></div>';
+    return;
+  }
+  el.innerHTML = history.map(function(h){
+    var cCol = h.confidence>=72?'#00e676':h.confidence>=58?'#ffd600':'#ff4d4d';
+    return '<div class="hist-item">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+      '<div class="hist-match">'+h.home+' vs '+h.away+'</div>'+
+      '<span style="font-size:13px;font-weight:700;color:'+cCol+'">'+h.confidence+'%</span>'+
+      '</div>'+
+      '<div class="hist-meta">'+h.date+' · Top Pick: <span style="color:var(--accent)">'+h.bestPick+'</span></div>'+
+      '<div class="hist-probs">'+
+      '<span class="badge badge-green">1: '+h.homeP+'%</span>'+
+      '<span class="badge badge-yellow">X: '+h.drawP+'%</span>'+
+      '<span class="badge badge-blue">2: '+h.awayP+'%</span>'+
+      '<span class="badge badge-red">O2.5: '+h.over25+'%</span>'+
+      '<span class="badge badge-purple">BTTS: '+h.btts+'%</span>'+
+      '</div></div>';
+  }).join('');
+}
+
+function clearHistory() {
+  if (confirm('Clear all history?')) {
+    history = [];
+    try { localStorage.removeItem('jkb2_hist'); } catch(e){}
+    renderHistory();
+  }
+}
+
+// Init
+document.getElementById('matchdate').valueAsDate = new Date();
+</script>
 </body>
 </html>
-
