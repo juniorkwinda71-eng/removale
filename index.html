@@ -1,1021 +1,383 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Junior k Study-Plan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@600&amp;display=swap');
-        
-        :root {
-            --primary: 234 179 8;
-        }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        .dark .glass {
-            background: rgba(15, 23, 42, 0.75);
-        }
-        
-        .nav-active {
-            background: rgba(234, 179, 8, 0.2);
-            color: rgb(234 179 8);
-            border-radius: 9999px;
-        }
-        
-        .timer-circle {
-            transition: stroke-dashoffset 0.3s linear;
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
-        }
-        
-        .section {
-            display: none;
-        }
-        
-        .section.active {
-            display: block;
-            animation: fadeIn 0.4s ease forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .time-block {
-            transition: all 0.2s ease;
-        }
-        
-        .modal {
-            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        @keyframes modalPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .quote-container {
-            transition: opacity 0.6s ease;
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>iPhone Tracking Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --blue:#007AFF;--green:#34C759;--orange:#FF9500;--red:#FF3B30;
+    --purple:#AF52DE;--teal:#5AC8FA;--pink:#FF2D55;
+    --bg:#0A0A0F;--card:#16161E;--card2:#1E1E2A;--border:#2A2A3A;
+    --text:#F2F2F7;--subtext:#8E8E93;--muted:#3A3A4A;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0A0A1A 0%,#0D1B3E 50%,#0A0A1A 100%);padding:60px 20px 50px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(0,122,255,.25) 0%,transparent 70%);pointer-events:none;}
+  .hero-icon{font-size:64px;margin-bottom:16px;display:block;filter:drop-shadow(0 0 30px rgba(0,122,255,.6));}
+  .hero h1{font-size:clamp(28px,6vw,48px);font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,#fff 30%,var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--subtext);margin-top:12px;font-size:16px;max-width:500px;margin-inline:auto;line-height:1.6;}
+  .badge{display:inline-block;background:rgba(0,122,255,.2);border:1px solid rgba(0,122,255,.4);color:var(--blue);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-top:16px;letter-spacing:.5px;}
+
+  /* NAV TABS */
+  .tabs{display:flex;overflow-x:auto;gap:8px;padding:20px 20px 0;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{flex-shrink:0;padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--subtext);font-size:13px;font-weight:500;cursor:pointer;transition:all .25s;}
+  .tab.active,.tab:hover{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+  /* SECTIONS */
+  .section{display:none;padding:20px;max-width:800px;margin:0 auto;}
+  .section.active{display:block;}
+
+  /* CARDS */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:16px;transition:transform .2s,box-shadow .2s;}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4);}
+  .card-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .icon-box{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+  .icon-blue{background:linear-gradient(135deg,#0A84FF,#007AFF);}
+  .icon-green{background:linear-gradient(135deg,#30D158,#25A244);}
+  .icon-orange{background:linear-gradient(135deg,#FF9F0A,#FF8000);}
+  .icon-red{background:linear-gradient(135deg,#FF453A,#D70015);}
+  .icon-purple{background:linear-gradient(135deg,#BF5AF2,#9B35D9);}
+  .icon-teal{background:linear-gradient(135deg,#5AC8FA,#0A84FF);}
+  .card-title{font-size:18px;font-weight:700;}
+  .card-sub{font-size:13px;color:var(--subtext);margin-top:2px;}
+
+  /* STEPS */
+  .steps{display:flex;flex-direction:column;gap:12px;}
+  .step{display:flex;gap:14px;align-items:flex-start;}
+  .step-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .step-content p{font-size:14px;line-height:1.7;color:#C8C8D0;}
+  .step-content strong{color:var(--text);}
+
+  /* TIP BOX */
+  .tip{background:linear-gradient(135deg,rgba(0,122,255,.1),rgba(90,200,250,.08));border:1px solid rgba(0,122,255,.25);border-radius:14px;padding:14px 18px;margin-top:14px;font-size:13px;color:#A8D4FF;line-height:1.6;}
+  .tip b{color:var(--teal);}
+  .warn{background:linear-gradient(135deg,rgba(255,149,0,.1),rgba(255,69,58,.08));border:1px solid rgba(255,149,0,.25);border-radius:14px;padding:14px 18px;margin-top:14px;font-size:13px;color:#FFD580;line-height:1.6;}
+  .warn b{color:var(--orange);}
+  .success{background:linear-gradient(135deg,rgba(52,199,89,.1),rgba(48,209,88,.06));border:1px solid rgba(52,199,89,.25);border-radius:14px;padding:14px 18px;margin-top:14px;font-size:13px;color:#8EFFA8;line-height:1.6;}
+  .success b{color:var(--green);}
+
+  /* FEATURE GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:12px;}
+  .feat{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center;}
+  .feat .fi{font-size:28px;margin-bottom:8px;}
+  .feat p{font-size:12px;font-weight:600;color:var(--subtext);}
+
+  /* DIVIDER */
+  .divider{height:1px;background:var(--border);margin:16px 0;}
+
+  /* PATH */
+  .path{background:var(--card2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--teal);font-weight:500;margin:8px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .path span{color:var(--subtext);}
+  .path .arrow{color:var(--border);}
+
+  /* TOGGLE */
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+  .toggle-row:last-child{border-bottom:none;}
+  .toggle-label{font-size:14px;font-weight:500;}
+  .toggle-desc{font-size:12px;color:var(--subtext);margin-top:2px;}
+  .toggle-pill{width:50px;height:28px;border-radius:14px;background:var(--green);display:flex;align-items:center;padding:3px;cursor:pointer;flex-shrink:0;}
+  .toggle-pill.off{background:var(--muted);}
+  .toggle-ball{width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .2s;}
+  .toggle-pill:not(.off) .toggle-ball{transform:translateX(22px);}
+
+  /* ALERT BOX */
+  .alert-card{background:linear-gradient(135deg,rgba(255,59,48,.12),rgba(175,82,222,.08));border:1px solid rgba(255,59,48,.3);border-radius:20px;padding:24px;margin-bottom:16px;}
+  .alert-card h3{color:#FF6B6B;font-size:17px;margin-bottom:12px;}
+
+  /* BOTTOM SPACE */
+  .bottom-pad{height:40px;}
+</style>
 </head>
-<body class="bg-zinc-950 text-white min-h-screen font-sans overflow-hidden">
-    <div class="flex h-screen">
-        <!-- SIDEBAR -->
-        <div class="w-72 bg-zinc-900 border-r border-zinc-800 flex flex-col">
-            <!-- Logo -->
-            <div class="p-8 flex items-center gap-3 border-b border-zinc-800">
-                <div class="w-10 h-10 bg-yellow-400 text-zinc-950 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-inner">📚</div>
-                <div>
-                    <span class="text-2xl font-semibold tracking-tight">Junior k</span>
-                    <span class="block text-[10px] text-yellow-400 -mt-1 tracking-[2px]">STUDY PLAN</span>
-                </div>
-            </div>
-            
-            <!-- Navigation -->
-            <div class="flex-1 px-4 py-6 space-y-1 overflow-y-auto" id="sidebar-nav">
-                <a onclick="navigateTo('dashboard')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer nav-active" data-section="dashboard">
-                    <i class="fa-solid fa-house w-5"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-                <a onclick="navigateTo('timetable')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer" data-section="timetable">
-                    <i class="fa-solid fa-calendar-days w-5"></i>
-                    <span class="font-medium">Timetable</span>
-                </a>
-                <a onclick="navigateTo('timer')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer" data-section="timer">
-                    <i class="fa-solid fa-stopwatch w-5"></i>
-                    <span class="font-medium">Study Timer</span>
-                </a>
-                <a onclick="navigateTo('notes')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer" data-section="notes">
-                    <i class="fa-solid fa-note-sticky w-5"></i>
-                    <span class="font-medium">Notes</span>
-                </a>
-                <a onclick="navigateTo('homework')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer" data-section="homework">
-                    <i class="fa-solid fa-list-check w-5"></i>
-                    <span class="font-medium">Homework</span>
-                </a>
-                <a onclick="navigateTo('analytics')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer" data-section="analytics">
-                    <i class="fa-solid fa-chart-pie w-5"></i>
-                    <span class="font-medium">Analytics</span>
-                </a>
-                <a onclick="navigateTo('motivation')" class="nav-item flex items-center gap-3 px-6 py-4 text-zinc-400 hover:text-white hover:bg-white/5 rounded-3xl cursor-pointer" data-section="motivation">
-                    <i class="fa-solid fa-heart w-5"></i>
-                    <span class="font-medium">Motivation</span>
-                </a>
-            </div>
-            
-            <!-- Bottom Profile -->
-            <div class="p-6 border-t border-zinc-800">
-                <div onclick="navigateTo('profile')" class="flex items-center gap-3 cursor-pointer hover:bg-white/5 p-3 rounded-3xl">
-                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-300 to-amber-500 rounded-2xl flex items-center justify-center text-2xl shadow-inner">👨‍🎓</div>
-                    <div class="flex-1">
-                        <div id="sidebar-name" class="font-semibold">Junior k</div>
-                        <div id="sidebar-grade" class="text-xs text-zinc-400">Grade 11 • Thabazimbi</div>
-                    </div>
-                    <i onclick="toggleDarkMode(event)" class="fa-solid fa-moon text-zinc-400 hover:text-yellow-400 cursor-pointer"></i>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MAIN CONTENT -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            
-            <!-- Top Bar -->
-            <div class="h-16 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-xl flex items-center px-8 z-50">
-                <div class="flex-1 flex items-center gap-4">
-                    <div id="current-page" class="text-2xl font-semibold">Dashboard</div>
-                </div>
-                
-                <div class="flex items-center gap-6">
-                    <div class="flex items-center bg-zinc-800 rounded-3xl px-4 py-1.5 text-sm">
-                        <i class="fa-solid fa-calendar mr-2 text-yellow-400"></i>
-                        <span id="current-date" class="font-medium"></span>
-                    </div>
-                    
-                    <div onclick="showAddModal()" class="w-9 h-9 bg-yellow-400 hover:bg-amber-300 transition-colors text-zinc-950 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-                    
-                    <div class="relative">
-                        <div onclick="toggleNotifications()" class="w-9 h-9 flex items-center justify-center cursor-pointer hover:bg-white/10 rounded-2xl">
-                            <i class="fa-solid fa-bell"></i>
-                        </div>
-                        <div id="notif-count" class="absolute -top-1 -right-1 bg-red-500 text-[10px] w-4 h-4 flex items-center justify-center rounded-full">3</div>
-                    </div>
-                    
-                    <div class="w-8 h-8 bg-zinc-700 rounded-2xl overflow-hidden">
-                        <img src="https://picsum.photos/id/64/128/128" alt="" class="w-full h-full object-cover">
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Content Area -->
-            <div class="flex-1 overflow-auto p-8" id="main-content">
-                
-                <!-- DASHBOARD -->
-                <div id="dashboard" class="section active">
-                    <div class="max-w-7xl mx-auto">
-                        <!-- Greeting -->
-                        <div class="mb-10">
-                            <div class="text-5xl font-semibold mb-1" id="greeting">Good evening, Junior k</div>
-                            <div class="text-zinc-400">Let's make today productive</div>
-                        </div>
-                        
-                        <div class="grid grid-cols-12 gap-6">
-                            <!-- Stats -->
-                            <div class="col-span-12 lg:col-span-8 grid grid-cols-3 gap-6">
-                                <div class="glass rounded-3xl p-8 card-hover border border-white/10">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="text-yellow-400 text-sm font-medium tracking-widest">TOTAL TIME</div>
-                                            <div id="total-study-time" class="text-6xl font-semibold mt-4 tabular-nums">24h 18m</div>
-                                        </div>
-                                        <i class="fa-solid fa-clock text-4xl text-yellow-400/30"></i>
-                                    </div>
-                                    <div class="h-2 bg-white/10 rounded-full mt-8 overflow-hidden">
-                                        <div class="h-full w-3/4 bg-yellow-400 rounded-full"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="glass rounded-3xl p-8 card-hover border border-white/10">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <div class="text-emerald-400 text-sm font-medium">TASKS</div>
-                                            <div id="tasks-completed" class="text-6xl font-semibold mt-4">14 / 19</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-xs text-emerald-400">74% done</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="glass rounded-3xl p-8 card-hover border border-white/10 flex flex-col justify-between">
-                                    <div class="text-rose-400 text-sm font-medium">STREAK</div>
-                                    <div class="text-7xl font-bold text-rose-400">7</div>
-                                    <div class="text-xs">days in a row 🔥</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Quick Timer -->
-                            <div onclick="navigateTo('timer')" class="col-span-12 lg:col-span-4 glass rounded-3xl p-8 card-hover border border-white/10 cursor-pointer">
-                                <div class="flex items-center justify-between mb-6">
-                                    <div class="font-medium">Quick Start Timer</div>
-                                    <div class="text-yellow-400">
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
-                                </div>
-                                <div class="text-5xl font-light tabular-nums text-center" id="quick-timer">25:00</div>
-                                <div class="text-center text-xs text-zinc-400 mt-1">Pomodoro Ready</div>
-                            </div>
-                            
-                            <!-- Today's Schedule -->
-                            <div class="col-span-12 lg:col-span-7 glass rounded-3xl p-8 border border-white/10">
-                                <div class="flex justify-between items-center mb-6">
-                                    <div class="font-semibold text-lg">Today's Focus</div>
-                                    <button onclick="navigateTo('timetable')" class="text-xs px-5 py-2 bg-white/10 hover:bg-white/20 rounded-3xl transition-colors">Full Timetable</button>
-                                </div>
-                                <div id="today-schedule" class="space-y-4">
-                                    <!-- Populated by JS -->
-                                </div>
-                            </div>
-                            
-                            <!-- Quick Notes -->
-                            <div onclick="navigateTo('notes')" class="col-span-12 lg:col-span-5 glass rounded-3xl p-8 border border-white/10 cursor-pointer">
-                                <div class="font-semibold mb-6 flex items-center gap-2">
-                                    <i class="fa-solid fa-note-sticky"></i>
-                                    <span>Recent Notes</span>
-                                </div>
-                                <div id="quick-notes" class="space-y-4 text-sm">
-                                    <!-- Populated by JS -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- TIMETABLE -->
-                <div id="timetable" class="section">
-                    <div class="max-w-5xl mx-auto">
-                        <div class="flex justify-between items-end mb-8">
-                            <div>
-                                <div class="text-3xl font-semibold">Study Timetable</div>
-                                <div class="text-zinc-400">This Week</div>
-                            </div>
-                            <button onclick="showAddTimetableModal()" class="flex items-center gap-2 px-6 py-3 bg-yellow-400 hover:bg-amber-300 text-zinc-950 rounded-3xl font-medium">
-                                <i class="fa-solid fa-plus"></i>
-                                <span>New Block</span>
-                            </button>
-                        </div>
-                        
-                        <div class="glass rounded-3xl p-2">
-                            <div id="timetable-list" class="divide-y divide-white/10">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- TIMER -->
-                <div id="timer" class="section">
-                    <div class="max-w-md mx-auto pt-12">
-                        <div class="text-center mb-12">
-                            <div id="timer-subject" class="text-yellow-400 font-medium text-sm tracking-widest">MATHEMATICS</div>
-                            <div id="timer-mode" class="text-2xl font-semibold mt-1">Deep Focus</div>
-                        </div>
-                        
-                        <!-- Circular Timer -->
-                        <div class="relative w-80 h-80 mx-auto">
-                            <svg class="w-full h-full -rotate-90" viewBox="0 0 300 300">
-                                <circle cx="150" cy="150" r="135" fill="none" stroke="#27272a" stroke-width="25"></circle>
-                                <circle id="timer-progress" cx="150" cy="150" r="135" fill="none" stroke="#eab308" stroke-width="25" 
-                                        stroke-dasharray="848" stroke-dashoffset="0" stroke-linecap="round"></circle>
-                            </svg>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                <div id="timer-display" class="text-7xl font-light tabular-nums">25:00</div>
-                                <div class="text-xs text-zinc-400 mt-2">minutes remaining</div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-center gap-6 mt-16">
-                            <button onclick="toggleTimer()" id="timer-btn" 
-                                    class="w-28 h-28 bg-yellow-400 hover:bg-amber-300 transition-all text-zinc-950 rounded-full flex items-center justify-center text-4xl shadow-2xl active:scale-95">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="flex justify-center gap-8 mt-10 text-sm">
-                            <button onclick="setPomodoro(25)" class="px-6 py-2 rounded-3xl hover:bg-white/10 transition-colors">25 min</button>
-                            <button onclick="setPomodoro(45)" class="px-6 py-2 rounded-3xl hover:bg-white/10 transition-colors">45 min</button>
-                            <button onclick="resetTimer()" class="px-6 py-2 rounded-3xl hover:bg-white/10 transition-colors text-rose-400">Reset</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- NOTES -->
-                <div id="notes" class="section">
-                    <div class="max-w-4xl mx-auto">
-                        <div class="flex gap-4 mb-8">
-                            <select id="note-subject" onchange="loadNotes()" class="glass px-5 py-4 rounded-3xl text-white border-0 focus:ring-2 focus:ring-yellow-400">
-                                <option value="">All Subjects</option>
-                            </select>
-                            <select id="note-term" onchange="loadNotes()" class="glass px-5 py-4 rounded-3xl text-white border-0 focus:ring-2 focus:ring-yellow-400">
-                                <option value="Term 1">Term 1</option>
-                                <option value="Term 2">Term 2</option>
-                                <option value="Term 3">Term 3</option>
-                                <option value="Term 4">Term 4</option>
-                            </select>
-                            <button onclick="showNewNoteModal()" class="ml-auto px-8 py-4 bg-yellow-400 text-zinc-950 rounded-3xl font-medium">New Note</button>
-                        </div>
-                        
-                        <div id="notes-list" class="space-y-6">
-                            <!-- JS populated -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- HOMEWORK -->
-                <div id="homework" class="section">
-                    <div class="max-w-4xl mx-auto">
-                        <div class="flex justify-between mb-8">
-                            <h2 class="text-3xl font-semibold">Assignments</h2>
-                            <button onclick="showAddHomeworkModal()" class="px-6 py-3 bg-yellow-400 text-zinc-950 rounded-3xl">Add Assignment</button>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-6" id="homework-grid">
-                            <!-- JS populated -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ANALYTICS -->
-                <div id="analytics" class="section">
-                    <div class="max-w-6xl mx-auto">
-                        <div class="grid grid-cols-12 gap-6">
-                            <div class="col-span-12 lg:col-span-7 glass rounded-3xl p-8">
-                                <h3 class="font-semibold mb-6">Weekly Study Hours</h3>
-                                <canvas id="barChart" height="140"></canvas>
-                            </div>
-                            <div class="col-span-12 lg:col-span-5 glass rounded-3xl p-8">
-                                <h3 class="font-semibold mb-6">Time by Subject</h3>
-                                <canvas id="pieChart" height="260"></canvas>
-                            </div>
-                        </div>
-                        
-                        <div class="glass rounded-3xl p-8 mt-8">
-                            <h3 class="font-semibold mb-6">Smart Insights</h3>
-                            <div id="insights-list" class="space-y-6">
-                                <!-- JS populated -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- MOTIVATION -->
-                <div id="motivation" class="section">
-                    <div class="max-w-xl mx-auto text-center pt-20">
-                        <div id="quote" class="quote-container text-3xl leading-relaxed font-light italic min-h-[260px]">
-                            "The only way to do great work is to love what you do."
-                        </div>
-                        <div id="quote-author" class="text-yellow-400 mt-8">- Steve Jobs</div>
-                        
-                        <button onclick="newQuote()" 
-                                class="mt-16 px-10 py-4 border border-white/30 hover:border-yellow-400 transition-colors rounded-3xl">
-                            New Inspiration
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- PROFILE -->
-                <div id="profile" class="section">
-                    <div class="max-w-md mx-auto glass rounded-3xl p-10">
-                        <div class="text-center mb-10">
-                            <div class="w-32 h-32 mx-auto bg-gradient-to-br from-amber-300 to-yellow-500 rounded-3xl flex items-center justify-center text-7xl shadow-inner mb-6">👨‍🎓</div>
-                            <input id="profile-name" value="Junior k" class="block w-full text-center text-4xl font-semibold bg-transparent outline-none">
-                        </div>
-                        
-                        <div class="space-y-8">
-                            <div>
-                                <label class="text-xs tracking-widest text-zinc-400 block mb-2">GRADE</label>
-                                <input id="profile-grade" value="11" class="glass w-full rounded-3xl px-6 py-5 text-lg">
-                            </div>
-                            <div>
-                                <label class="text-xs tracking-widest text-zinc-400 block mb-2">AGE</label>
-                                <input id="profile-age" value="17" class="glass w-full rounded-3xl px-6 py-5 text-lg">
-                            </div>
-                            <button onclick="saveProfile()" 
-                                    class="w-full py-6 bg-yellow-400 text-zinc-950 rounded-3xl font-semibold text-lg active:scale-95 transition-transform">
-                                Save Profile
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<body>
+
+<div class="hero">
+  <span class="hero-icon">📍</span>
+  <h1>iPhone Tracking Guide</h1>
+  <p>Everything you need to locate, monitor, and protect your iPhone using Apple's Find My system.</p>
+  <span class="badge">✦ COMPLETE GUIDE</span>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showSection('overview',this)">🏠 Overview</div>
+  <div class="tab" onclick="showSection('setup',this)">⚙️ Setup</div>
+  <div class="tab" onclick="showSection('icloud',this)">☁️ iCloud</div>
+  <div class="tab" onclick="showSection('findmy',this)">📱 Find My App</div>
+  <div class="tab" onclick="showSection('share',this)">👥 Share Location</div>
+  <div class="tab" onclick="showSection('lost',this)">🚨 Lost Mode</div>
+  <div class="tab" onclick="showSection('erase',this)">🗑️ Erase</div>
+  <div class="tab" onclick="showSection('tips',this)">💡 Tips</div>
+</div>
+
+<!-- ===== OVERVIEW ===== -->
+<div class="section active" id="overview">
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-blue">🌐</div>
+      <div><div class="card-title">What is Find My?</div><div class="card-sub">Apple's built-in tracking network</div></div>
     </div>
-    
-    <!-- MODALS -->
-    <div id="modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100]">
-        <div class="modal glass w-full max-w-md mx-4 rounded-3xl p-8">
-            <!-- Dynamic modal content loaded by JS -->
-            <div id="modal-content"></div>
-        </div>
+    <p style="font-size:14px;color:#C8C8D0;line-height:1.8;">Find My is Apple's official system for locating your iPhone, iPad, Mac, AirPods, and Apple Watch. It uses GPS, Wi-Fi, Bluetooth, and Apple's massive crowdsourced network of 2 billion+ devices to pinpoint your phone — even when it's offline.</p>
+    <div class="grid">
+      <div class="feat"><div class="fi">📡</div><p>GPS + Wi-Fi</p></div>
+      <div class="feat"><div class="fi">🔵</div><p>Bluetooth</p></div>
+      <div class="feat"><div class="fi">🌐</div><p>Offline Network</p></div>
+      <div class="feat"><div class="fi">🔒</div><p>End-to-End Encrypted</p></div>
+      <div class="feat"><div class="fi">🔋</div><p>Low Power Mode</p></div>
+      <div class="feat"><div class="fi">🔔</div><p>Alerts & Sounds</p></div>
     </div>
-    
-    <script>
-        // Tailwind script
-        function initTailwind() {
-            // Already using CDN
-        }
-        
-        // Data storage
-        let currentUser = {
-            name: "Junior k",
-            grade: "11",
-            age: "17"
-        }
-        
-        let subjects = ["Mathematics", "Physical Science", "Life Sciences", "English", "History"]
-        let timetable = []
-        let notes = []
-        let homework = []
-        let studySessions = []
-        
-        let timerInterval = null
-        let timeLeft = 25 * 60
-        let isRunning = false
-        let currentTimerMode = 25
-        
-        // Sample quotes
-        const quotes = [
-            { text: "The beautiful thing about learning is that nobody can take it away from you.", author: "B.B. King" },
-            { text: "Success is the sum of small efforts, repeated day in and day out.", author: "Robert Collier" },
-            { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
-            { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" }
-        ]
-        let currentQuoteIndex = 0
-        
-        // Chart instances
-        let barChartInstance = null
-        let pieChartInstance = null
-        
-        function saveToLocalStorage() {
-            localStorage.setItem('jk_studyplan_user', JSON.stringify(currentUser))
-            localStorage.setItem('jk_studyplan_timetable', JSON.stringify(timetable))
-            localStorage.setItem('jk_studyplan_notes', JSON.stringify(notes))
-            localStorage.setItem('jk_studyplan_homework', JSON.stringify(homework))
-            localStorage.setItem('jk_studyplan_sessions', JSON.stringify(studySessions))
-        }
-        
-        function loadFromLocalStorage() {
-            const savedUser = localStorage.getItem('jk_studyplan_user')
-            if (savedUser) currentUser = JSON.parse(savedUser)
-            
-            const savedTT = localStorage.getItem('jk_studyplan_timetable')
-            if (savedTT) timetable = JSON.parse(savedTT)
-            
-            const savedNotes = localStorage.getItem('jk_studyplan_notes')
-            if (savedNotes) notes = JSON.parse(savedNotes)
-            
-            const savedHW = localStorage.getItem('jk_studyplan_homework')
-            if (savedHW) homework = JSON.parse(savedHW)
-            
-            const savedSessions = localStorage.getItem('jk_studyplan_sessions')
-            if (savedSessions) studySessions = JSON.parse(savedSessions)
-        }
-        
-        function navigateTo(section) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'))
-            document.getElementById(section).classList.add('active')
-            
-            document.getElementById('current-page').textContent = section === 'dashboard' ? 'Dashboard' : 
-                                                                section === 'timetable' ? 'Timetable' :
-                                                                section === 'timer' ? 'Focus Timer' :
-                                                                section === 'notes' ? 'Notebook' :
-                                                                section === 'homework' ? 'Assignments' :
-                                                                section === 'analytics' ? 'Progress' : 
-                                                                section === 'motivation' ? 'Inspiration' : 'Profile'
-            
-            // Deactivate all nav
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('nav-active'))
-            // Activate correct one
-            const activeNav = document.querySelector(`.nav-item[data-section="${section}"]`)
-            if (activeNav) activeNav.classList.add('nav-active')
-            
-            if (section === 'analytics') renderCharts()
-            if (section === 'notes') loadNotes()
-            if (section === 'homework') renderHomework()
-            if (section === 'timetable') renderTimetable()
-        }
-        
-        function updateDate() {
-            const dateEl = document.getElementById('current-date')
-            const now = new Date()
-            const options = { weekday: 'short', month: 'short', day: 'numeric' }
-            dateEl.textContent = now.toLocaleDateString('en-ZA', options)
-        }
-        
-        function updateGreeting() {
-            const greetingEl = document.getElementById('greeting')
-            const hour = new Date().getHours()
-            let greeting = "Good evening"
-            if (hour < 12) greeting = "Good morning"
-            else if (hour < 17) greeting = "Good afternoon"
-            greetingEl.textContent = `${greeting}, ${currentUser.name}`
-        }
-        
-        function renderTodaySchedule() {
-            const container = document.getElementById('today-schedule')
-            container.innerHTML = `
-                <div class="flex gap-4 items-center bg-white/5 rounded-2xl p-4">
-                    <div class="w-12 h-12 bg-blue-400/20 text-blue-400 rounded-2xl flex items-center justify-center text-xl">📐</div>
-                    <div class="flex-1">
-                        <div class="font-medium">Mathematics - Algebra</div>
-                        <div class="text-xs text-zinc-400">14:00 - 15:30</div>
-                    </div>
-                    <div class="text-emerald-400 text-xs font-medium">2h 30m</div>
-                </div>
-                <div class="flex gap-4 items-center bg-white/5 rounded-2xl p-4">
-                    <div class="w-12 h-12 bg-purple-400/20 text-purple-400 rounded-2xl flex items-center justify-center text-xl">🧪</div>
-                    <div class="flex-1">
-                        <div class="font-medium">Physical Science</div>
-                        <div class="text-xs text-zinc-400">16:00 - 17:00</div>
-                    </div>
-                    <div class="text-emerald-400 text-xs font-medium">1h</div>
-                </div>
-            `
-        }
-        
-        function renderQuickNotes() {
-            const container = document.getElementById('quick-notes')
-            container.innerHTML = `
-                <div class="p-4 bg-white/5 rounded-2xl">
-                    <div class="text-xs text-yellow-400">MATHEMATICS • TERM 2</div>
-                    <div class="line-clamp-2 text-sm mt-2">Quadratic equations can be solved using the formula x = [-b ± √(b² - 4ac)] / 2a</div>
-                </div>
-            `
-        }
-        
-        function showAddModal() {
-            // Quick add modal
-            const modal = document.getElementById('modal')
-            const content = document.getElementById('modal-content')
-            content.innerHTML = `
-                <h3 class="text-xl font-semibold mb-6">Quick Add</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="quickAdd('timetable');" class="py-8 rounded-3xl border border-white/20 hover:border-yellow-400 transition-colors">Timetable Block</button>
-                    <button onclick="quickAdd('homework');" class="py-8 rounded-3xl border border-white/20 hover:border-yellow-400 transition-colors">Assignment</button>
-                    <button onclick="quickAdd('note');" class="py-8 rounded-3xl border border-white/20 hover:border-yellow-400 transition-colors">New Note</button>
-                </div>
-                <button onclick="closeModal()" class="mt-8 w-full py-4 text-zinc-400">Cancel</button>
-            `
-            modal.classList.remove('hidden')
-            modal.classList.add('flex')
-        }
-        
-        function quickAdd(type) {
-            closeModal()
-            if (type === 'timetable') {
-                navigateTo('timetable')
-                setTimeout(() => showAddTimetableModal(), 300)
-            } else if (type === 'homework') {
-                navigateTo('homework')
-                setTimeout(() => showAddHomeworkModal(), 300)
-            } else if (type === 'note') {
-                navigateTo('notes')
-                setTimeout(() => showNewNoteModal(), 300)
-            }
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('modal')
-            modal.classList.add('hidden')
-            modal.classList.remove('flex')
-        }
-        
-        function showAddTimetableModal() {
-            const modal = document.getElementById('modal')
-            const content = document.getElementById('modal-content')
-            content.innerHTML = `
-                <h3 class="font-semibold text-xl mb-6">Add Time Block</h3>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-xs mb-2 text-zinc-400">SUBJECT</label>
-                        <select id="tt-subject" class="glass w-full rounded-3xl p-5">
-                            ${subjects.map(s => `<option>${s}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs mb-2 text-zinc-400">START TIME</label>
-                            <input id="tt-start" type="time" value="14:00" class="glass w-full rounded-3xl p-5">
-                        </div>
-                        <div>
-                            <label class="block text-xs mb-2 text-zinc-400">END TIME</label>
-                            <input id="tt-end" type="time" value="15:30" class="glass w-full rounded-3xl p-5">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs mb-2 text-zinc-400">DESCRIPTION</label>
-                        <textarea id="tt-desc" class="glass w-full rounded-3xl p-5 h-24" placeholder="Chapter 5 revision..."></textarea>
-                    </div>
-                </div>
-                <div class="flex gap-4 mt-10">
-                    <button onclick="closeModal()" class="flex-1 py-5 border border-white/30 rounded-3xl">Cancel</button>
-                    <button onclick="addTimetableBlock()" class="flex-1 py-5 bg-yellow-400 text-zinc-950 rounded-3xl font-medium">Add Block</button>
-                </div>
-            `
-            modal.classList.remove('hidden')
-            modal.classList.add('flex')
-        }
-        
-        function addTimetableBlock() {
-            const subject = document.getElementById('tt-subject').value
-            const start = document.getElementById('tt-start').value
-            const end = document.getElementById('tt-end').value
-            const desc = document.getElementById('tt-desc').value || ''
-            
-            timetable.push({
-                id: Date.now(),
-                subject,
-                start,
-                end,
-                description: desc
-            })
-            saveToLocalStorage()
-            closeModal()
-            renderTimetable()
-        }
-        
-        function renderTimetable() {
-            const container = document.getElementById('timetable-list')
-            if (timetable.length === 0) {
-                container.innerHTML = `<div class="p-12 text-center text-zinc-400">No blocks yet. Add your first one!</div>`
-                return
-            }
-            
-            let html = ''
-            timetable.forEach(block => {
-                html += `
-                    <div class="time-block flex items-center gap-6 p-6 hover:bg-white/5 rounded-3xl group">
-                        <div class="w-20 text-right">
-                            <div class="font-mono text-lg">${block.start}</div>
-                            <div class="font-mono text-xs text-zinc-400">${block.end}</div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-3">
-                                <span class="inline-block w-3 h-3 bg-yellow-400 rounded-full"></span>
-                                <span class="font-semibold">${block.subject}</span>
-                            </div>
-                            <div class="text-sm text-zinc-400 mt-1">${block.description}</div>
-                        </div>
-                        <div class="opacity-0 group-hover:opacity-100 transition-all flex gap-2">
-                            <button onclick="deleteTimetable(${block.id})" class="w-8 h-8 flex items-center justify-center text-rose-400"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `
-            })
-            container.innerHTML = html
-        }
-        
-        function deleteTimetable(id) {
-            if (confirm("Delete this block?")) {
-                timetable = timetable.filter(b => b.id !== id)
-                saveToLocalStorage()
-                renderTimetable()
-            }
-        }
-        
-        // Timer functions
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60)
-            const seconds = timeLeft % 60
-            const display = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-            document.getElementById('timer-display').textContent = display
-            
-            // Progress
-            const total = currentTimerMode * 60
-            const progress = (timeLeft / total) * 848
-            document.getElementById('timer-progress').setAttribute('stroke-dashoffset', 848 - progress)
-        }
-        
-        function toggleTimer() {
-            const btn = document.getElementById('timer-btn')
-            if (isRunning) {
-                clearInterval(timerInterval)
-                btn.innerHTML = `<i class="fa-solid fa-play"></i>`
-                isRunning = false
-            } else {
-                timerInterval = setInterval(() => {
-                    timeLeft--
-                    updateTimerDisplay()
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval)
-                        isRunning = false
-                        alert("Session complete! Great work!")
-                        // Record session
-                        studySessions.push({
-                            date: new Date().toISOString().split('T')[0],
-                            duration: currentTimerMode,
-                            subject: document.getElementById('timer-subject').textContent
-                        })
-                        saveToLocalStorage()
-                    }
-                }, 1000)
-                btn.innerHTML = `<i class="fa-solid fa-pause"></i>`
-                isRunning = true
-            }
-        }
-        
-        function setPomodoro(minutes) {
-            currentTimerMode = minutes
-            timeLeft = minutes * 60
-            updateTimerDisplay()
-        }
-        
-        function resetTimer() {
-            clearInterval(timerInterval)
-            isRunning = false
-            timeLeft = currentTimerMode * 60
-            updateTimerDisplay()
-            document.getElementById('timer-btn').innerHTML = `<i class="fa-solid fa-play"></i>`
-        }
-        
-        function loadNotes() {
-            const container = document.getElementById('notes-list')
-            container.innerHTML = ''
-            
-            // Sample notes
-            if (notes.length === 0) {
-                notes = [
-                    {
-                        id: 1,
-                        subject: "Mathematics",
-                        term: "Term 2",
-                        title: "Quadratic Formula",
-                        content: "x = [-b ± √(b² - 4ac)] / (2a)",
-                        date: "2026-05-04"
-                    }
-                ]
-            }
-            
-            notes.forEach(note => {
-                const div = document.createElement('div')
-                div.className = "glass rounded-3xl p-8"
-                div.innerHTML = `
-                    <div class="flex justify-between">
-                        <div>
-                            <span class="px-4 py-1 bg-white/10 text-xs rounded-3xl">${note.subject}</span>
-                            <span class="ml-3 text-xs text-zinc-400">${note.term}</span>
-                        </div>
-                        <div class="text-xs text-zinc-400">${note.date}</div>
-                    </div>
-                    <div class="font-medium text-xl mt-6">${note.title}</div>
-                    <div class="mt-4 text-zinc-300 leading-relaxed">${note.content}</div>
-                `
-                container.appendChild(div)
-            })
-        }
-        
-        function showNewNoteModal() {
-            const modal = document.getElementById('modal')
-            const content = document.getElementById('modal-content')
-            content.innerHTML = `
-                <h3 class="font-semibold mb-6">Create New Note</h3>
-                <input id="new-note-title" placeholder="Note title" class="glass w-full px-6 py-5 rounded-3xl mb-4">
-                <textarea id="new-note-content" placeholder="Write your note here..." class="glass w-full h-52 px-6 py-5 rounded-3xl mb-6"></textarea>
-                <div class="flex gap-4">
-                    <button onclick="closeModal()" class="flex-1 py-5 border border-white/30 rounded-3xl">Cancel</button>
-                    <button onclick="saveNewNote()" class="flex-1 py-5 bg-yellow-400 text-zinc-950 rounded-3xl">Save Note</button>
-                </div>
-            `
-            modal.classList.remove('hidden')
-            modal.classList.add('flex')
-        }
-        
-        function saveNewNote() {
-            const title = document.getElementById('new-note-title').value || "Untitled Note"
-            const content = document.getElementById('new-note-content').value || ""
-            
-            notes.push({
-                id: Date.now(),
-                subject: "Mathematics",
-                term: "Term 2",
-                title: title,
-                content: content,
-                date: new Date().toISOString().split('T')[0]
-            })
-            saveToLocalStorage()
-            closeModal()
-            loadNotes()
-        }
-        
-        function renderHomework() {
-            const container = document.getElementById('homework-grid')
-            container.innerHTML = ''
-            
-            if (homework.length === 0) {
-                homework = [
-                    {id: 1, title: "Complete Calculus Worksheet", subject: "Mathematics", due: "2026-05-10", completed: false},
-                    {id: 2, title: "Essay on Apartheid", subject: "History", due: "2026-05-08", completed: true}
-                ]
-            }
-            
-            homework.forEach(hw => {
-                const card = document.createElement('div')
-                card.className = `glass rounded-3xl p-7 ${hw.completed ? 'opacity-75' : ''}`
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div class="font-medium">${hw.title}</div>
-                        <input type="checkbox" ${hw.completed ? 'checked' : ''} onchange="toggleHomeworkComplete(${hw.id})" class="accent-yellow-400">
-                    </div>
-                    <div class="text-xs mt-8 text-zinc-400">${hw.subject} • Due ${hw.due}</div>
-                `
-                container.appendChild(card)
-            })
-        }
-        
-        function toggleHomeworkComplete(id) {
-            const hw = homework.find(h => h.id === id)
-            if (hw) hw.completed = !hw.completed
-            saveToLocalStorage()
-            renderHomework()
-        }
-        
-        function showAddHomeworkModal() {
-            const modal = document.getElementById('modal')
-            const content = document.getElementById('modal-content')
-            content.innerHTML = `
-                <h3 class="font-semibold mb-6">New Assignment</h3>
-                <input id="hw-title" placeholder="Assignment title" class="glass w-full px-6 py-5 rounded-3xl mb-4">
-                <select id="hw-subject" class="glass w-full px-6 py-5 rounded-3xl mb-6">
-                    ${subjects.map(s => `<option>${s}</option>`).join('')}
-                </select>
-                <input id="hw-due" type="date" class="glass w-full px-6 py-5 rounded-3xl mb-8">
-                <div class="flex gap-4">
-                    <button onclick="closeModal()" class="flex-1 py-5 border border-white/30 rounded-3xl">Cancel</button>
-                    <button onclick="addHomework()" class="flex-1 py-5 bg-yellow-400 text-zinc-950 rounded-3xl">Add</button>
-                </div>
-            `
-            modal.classList.remove('hidden')
-            modal.classList.add('flex')
-        }
-        
-        function addHomework() {
-            const title = document.getElementById('hw-title').value || "Untitled Assignment"
-            const subject = document.getElementById('hw-subject').value
-            const due = document.getElementById('hw-due').value || "2026-05-15"
-            
-            homework.push({
-                id: Date.now(),
-                title,
-                subject,
-                due,
-                completed: false
-            })
-            saveToLocalStorage()
-            closeModal()
-            renderHomework()
-        }
-        
-        function renderCharts() {
-            // Bar Chart
-            const barCtx = document.getElementById('barChart')
-            if (barChartInstance) barChartInstance.destroy()
-            
-            barChartInstance = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Hours',
-                        data: [3.5, 4.2, 2.8, 5.1, 3.9, 6.2, 1.8],
-                        backgroundColor: '#eab308',
-                        borderRadius: 8,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa' } },
-                        x: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa' } }
-                    }
-                }
-            })
-            
-            // Pie Chart
-            const pieCtx = document.getElementById('pieChart')
-            if (pieChartInstance) pieChartInstance.destroy()
-            
-            pieChartInstance = new Chart(pieCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Mathematics', 'Science', 'English', 'History'],
-                    datasets: [{
-                        data: [42, 28, 18, 12],
-                        backgroundColor: ['#eab308', '#22d3ee', '#a78bfa', '#f43f5e'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    cutout: "75%",
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#d1d5db', padding: 20, boxWidth: 12, boxHeight: 12 }
-                        }
-                    }
-                }
-            })
-        }
-        
-        function renderInsights() {
-            const container = document.getElementById('insights-list')
-            container.innerHTML = `
-                <div class="flex gap-4">
-                    <div class="text-4xl">📉</div>
-                    <div>
-                        <div class="font-medium">Focus more on Life Sciences</div>
-                        <div class="text-sm text-zinc-400">You've spent only 8% of your time on it this week.</div>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="text-4xl">🏆</div>
-                    <div>
-                        <div class="font-medium">Personal best!</div>
-                        <div class="text-sm text-zinc-400">You studied 6 hours on Saturday.</div>
-                    </div>
-                </div>
-            `
-        }
-        
-        function newQuote() {
-            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length
-            const q = quotes[currentQuoteIndex]
-            const quoteEl = document.getElementById('quote')
-            const authorEl = document.getElementById('quote-author')
-            
-            quoteEl.style.opacity = 0
-            setTimeout(() => {
-                quoteEl.textContent = `"${q.text}"`
-                authorEl.textContent = `- ${q.author}`
-                quoteEl.style.opacity = 1
-            }, 400)
-        }
-        
-        function saveProfile() {
-            currentUser.name = document.getElementById('profile-name').value || "Junior k"
-            currentUser.grade = document.getElementById('profile-grade').value
-            currentUser.age = document.getElementById('profile-age').value
-            saveToLocalStorage()
-            document.getElementById('sidebar-name').textContent = currentUser.name
-            alert("Profile saved successfully!")
-            navigateTo('dashboard')
-        }
-        
-        function toggleDarkMode(e) {
-            e.stopImmediatePropagation()
-            document.documentElement.classList.toggle('dark')
-        }
-        
-        function toggleNotifications() {
-            alert("You have 3 upcoming deadlines!")
-        }
-        
-        // Initialize everything
-        function initializeApp() {
-            loadFromLocalStorage()
-            
-            // Update UI with user data
-            document.getElementById('sidebar-name').textContent = currentUser.name
-            document.getElementById('sidebar-grade').innerHTML = `Grade ${currentUser.grade} • Thabazimbi`
-            
-            updateDate()
-            updateGreeting()
-            renderTodaySchedule()
-            renderQuickNotes()
-            renderTimetable()
-            renderHomework()
-            renderInsights()
-            
-            // Set initial timer
-            updateTimerDisplay()
-            
-            // Show dashboard first
-            navigateTo('dashboard')
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (e.key === "/" && document.getElementById('timer').classList.contains('active')) {
-                    e.preventDefault()
-                    toggleTimer()
-                }
-            })
-            
-            console.log('%cJunior k Study-Plan initialized successfully ✨', 'color:#eab308; font-family:monospace')
-        }
-        
-        // Boot the app
-        window.onload = initializeApp
-    </script>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-green">✅</div>
+      <div><div class="card-title">What You Can Do</div><div class="card-sub">Full capabilities at a glance</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p><strong>See your iPhone's location</strong> on a live map in real time.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p><strong>Play a sound</strong> to locate your phone nearby.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p><strong>Enable Lost Mode</strong> — locks device & shows a contact number.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p><strong>Share location</strong> with family and trusted contacts.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p><strong>Remotely erase</strong> all data if stolen.</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><p><strong>Track offline</strong> via Apple's crowdsourced device network.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETUP ===== -->
+<div class="section" id="setup">
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-blue">⚙️</div>
+      <div><div class="card-title">Enable Find My iPhone</div><div class="card-sub">First-time setup on your device</div></div>
+    </div>
+    <div class="path">Settings <span class="arrow">›</span> <span>[Your Name]</span> <span class="arrow">›</span> Find My <span class="arrow">›</span> Find My iPhone
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open <strong>Settings</strong> on your iPhone.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Tap your <strong>name</strong> at the top (Apple ID).</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Tap <strong>Find My</strong>.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>Tap <strong>Find My iPhone</strong> and toggle it <strong>ON</strong>.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p>Also enable <strong>Enable Offline Finding</strong> — this lets your iPhone be found even without internet.</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><p>Enable <strong>Send Last Location</strong> — this sends GPS data to Apple when battery is critically low.</p></div></div>
+    </div>
+    <div class="tip"><b>💡 Tip:</b> You must be signed in with your Apple ID for Find My to work. Without iCloud sign-in, tracking is not possible.</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-teal">📍</div>
+      <div><div class="card-title">Location Services</div><div class="card-sub">Make sure location is ON</div></div>
+    </div>
+    <div class="path">Settings <span class="arrow">›</span> Privacy & Security <span class="arrow">›</span> Location Services</div>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Location Services</div><div class="toggle-desc">Master switch — must be ON</div></div>
+      <div class="toggle-pill"><div class="toggle-ball"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div><div class="toggle-label">Find My → While Using</div><div class="toggle-desc">Set to "Always" for best results</div></div>
+      <div class="toggle-pill"><div class="toggle-ball"></div></div>
+    </div>
+    <div class="success"><b>✅ Recommended:</b> Set Find My location access to <strong>Always</strong> so it can report location even when the app isn't open.</div>
+  </div>
+</div>
+
+<!-- ===== iCLOUD ===== -->
+<div class="section" id="icloud">
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-teal">☁️</div>
+      <div><div class="card-title">Track via iCloud.com</div><div class="card-sub">From any browser, anywhere</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open any browser and go to <strong>icloud.com/find</strong></p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Sign in with your <strong>Apple ID and password</strong>.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Complete <strong>two-factor authentication</strong> if prompted.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>Click <strong>"All Devices"</strong> at the top of the map.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p>Select your iPhone from the list — it will show on the map.</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><p>You'll see options: <strong>Play Sound</strong>, <strong>Lost Mode</strong>, <strong>Erase iPhone</strong>.</p></div></div>
+    </div>
+    <div class="tip"><b>💡 Tip:</b> iCloud.com works from Windows, Android, Chromebook — any device with a browser. This is the best method when you don't have another Apple device.</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-orange">📊</div>
+      <div><div class="card-title">Reading the Map</div><div class="card-sub">Understanding what you see</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">🟢</div><div class="step-content"><p><strong>Green dot</strong> — iPhone is online and location is live.</p></div></div>
+      <div class="step"><div class="step-num">⚫</div><div class="step-content"><p><strong>Grey dot</strong> — iPhone is offline. Shows last known location with a timestamp.</p></div></div>
+      <div class="step"><div class="step-num">🔵</div><div class="step-content"><p><strong>Blue circle</strong> — Approximate location radius. Larger = less precise.</p></div></div>
+    </div>
+    <div class="warn"><b>⚠️ Note:</b> If the phone is off or in airplane mode, you'll only see the last location before it went offline.</div>
+  </div>
+</div>
+
+<!-- ===== FIND MY APP ===== -->
+<div class="section" id="findmy">
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-green">📱</div>
+      <div><div class="card-title">Using the Find My App</div><div class="card-sub">On another iPhone, iPad or Mac</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open the <strong>Find My</strong> app (green icon with radar waves).</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Tap the <strong>Devices</strong> tab at the bottom.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Select your iPhone from the list.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>The map shows your phone's location with an accuracy indicator.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p>Tap <strong>"Directions"</strong> to get turn-by-turn navigation to your phone.</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-blue">🔊</div>
+      <div><div class="card-title">Play a Sound</div><div class="card-sub">Find it nearby</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Select your iPhone in Find My.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Tap <strong>"Play Sound"</strong> — your phone will beep loudly for 2 minutes.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>The sound plays <strong>even if your phone is on silent</strong>.</p></div></div>
+    </div>
+    <div class="tip"><b>💡 Great for:</b> Finding your phone between couch cushions, under the bed, or in another room.</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-purple">📡</div>
+      <div><div class="card-title">Precision Finding</div><div class="card-sub">iPhone 11 and later</div></div>
+    </div>
+    <p style="font-size:14px;color:#C8C8D0;line-height:1.8;margin-bottom:12px;">On iPhone 11 and later, <strong>Precision Finding</strong> uses Ultra Wideband (UWB) technology to give you directional arrows and distance to your iPhone — like a real-time compass pointing straight at it.</p>
+    <div class="success"><b>✅ How to use:</b> Open Find My → Devices → tap your iPhone → tap "Find" → follow the on-screen arrow and distance meter.</div>
+  </div>
+</div>
+
+<!-- ===== SHARE LOCATION ===== -->
+<div class="section" id="share">
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-teal">👥</div>
+      <div><div class="card-title">Share Your Location</div><div class="card-sub">With family or trusted contacts</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Open <strong>Find My</strong> app → tap the <strong>People</strong> tab.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Tap <strong>"Share My Location"</strong>.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Choose a contact from your list.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>Select duration: <strong>1 hour</strong>, <strong>Until end of day</strong>, or <strong>Indefinitely</strong>.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p>They'll receive a notification and can see your location on their Find My app.</p></div></div>
+    </div>
+    <div class="tip"><b>💡 Two-way sharing:</b> When you share, the other person can also share their location back with you.</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-green">👨‍👩‍👧</div>
+      <div><div class="card-title">Family Sharing</div><div class="card-sub">Track your whole family</div></div>
+    </div>
+    <div class="path">Settings <span class="arrow">›</span> [Your Name] <span class="arrow">›</span> Family Sharing <span class="arrow">›</span> Location Sharing</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Set up <strong>Family Sharing</strong> in Settings with up to 5 family members.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Each member must accept the invitation sent to their Apple ID.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Once joined, all family members appear in the <strong>People tab</strong> of Find My.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>See all family devices on one shared map in real time.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOST MODE ===== -->
+<div class="section" id="lost">
+  <div class="alert-card">
+    <h3>🚨 Lost Mode — When Your iPhone is Missing</h3>
+    <p style="font-size:14px;color:#FFAAAA;line-height:1.7;">Lost Mode locks your iPhone remotely, disables Apple Pay, and displays a custom message with a phone number on the lock screen. Your phone keeps reporting its location even in Lost Mode.</p>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-red">🔒</div>
+      <div><div class="card-title">Enable Lost Mode</div><div class="card-sub">Lock and track immediately</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Go to <strong>icloud.com/find</strong> or open Find My app on another device.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Select your iPhone from the device list.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Tap <strong>"Mark As Lost"</strong> → <strong>Activate</strong>.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>Enter a <strong>phone number</strong> to display on the lock screen (your backup number or family member).</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p>Type a <strong>message</strong>, e.g. "This iPhone is lost. Please call the number above."</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><p>Tap <strong>Activate</strong>. The iPhone is now locked and being tracked.</p></div></div>
+    </div>
+    <div class="success"><b>✅ What happens:</b> Device locks immediately. Apple Pay disabled. Lock screen shows your message. Location updates continue. You get email notifications when found.</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-orange">🔔</div>
+      <div><div class="card-title">Location Notifications</div><div class="card-sub">Get alerted when it moves</div></div>
+    </div>
+    <p style="font-size:14px;color:#C8C8D0;line-height:1.7;margin-bottom:10px;">In Lost Mode, you can enable <strong>location notifications</strong> — Apple sends you an email whenever your iPhone's location is detected or updated.</p>
+    <div class="warn"><b>⚠️ Important:</b> Do NOT attempt to personally confront someone who has your phone. Share the location with local authorities instead.</div>
+  </div>
+</div>
+
+<!-- ===== ERASE ===== -->
+<div class="section" id="erase">
+  <div class="alert-card">
+    <h3>🗑️ Remote Erase — Last Resort Only</h3>
+    <p style="font-size:14px;color:#FFAAAA;line-height:1.7;">Remotely erasing your iPhone permanently deletes ALL data. Once erased, tracking is no longer possible. Only use this if you're certain the device is gone for good and you want to protect your personal data.</p>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-red">⚠️</div>
+      <div><div class="card-title">How to Erase Remotely</div><div class="card-sub">Protect your data permanently</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><p>Go to <strong>icloud.com/find</strong> and sign in.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><p>Select your iPhone.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><p>Click <strong>"Erase iPhone"</strong>.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><p>Enter your Apple ID password to confirm.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><p>The erase will begin next time the phone connects to the internet.</p></div></div>
+    </div>
+    <div class="warn"><b>⚠️ Warning:</b> After erasing, the phone can no longer be tracked. The device will still show in your account and is linked to your Apple ID — meaning no one else can activate it without your credentials (Activation Lock).</div>
+    <div class="success"><b>✅ Activation Lock:</b> Even after a remote erase, the iPhone remains locked to your Apple ID. The thief cannot use or resell it without your password.</div>
+  </div>
+</div>
+
+<!-- ===== TIPS ===== -->
+<div class="section" id="tips">
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-purple">💡</div>
+      <div><div class="card-title">Pro Tips & Tricks</div><div class="card-sub">Get the most out of tracking</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">⚡</div><div class="step-content"><p><strong>Enable "Send Last Location"</strong> in Find My settings. When battery hits 5%, it auto-sends GPS to Apple before dying.</p></div></div>
+      <div class="step"><div class="step-num">🔋</div><div class="step-content"><p><strong>iPhone 15 and later:</strong> Even when completely powered off, the phone emits a Bluetooth signal so Find My can still locate it.</p></div></div>
+      <div class="step"><div class="step-num">🛡️</div><div class="step-content"><p><strong>Never turn off Find My:</strong> In Settings → Screen Time, you can prevent Find My from being disabled. Great for kids' devices.</p></div></div>
+      <div class="step"><div class="step-num">🔐</div><div class="step-content"><p><strong>Use Stolen Device Protection:</strong> Settings → Face ID & Passcode → Stolen Device Protection. Adds a delay for sensitive actions when away from home.</p></div></div>
+      <div class="step"><div class="step-num">📶</div><div class="step-content"><p><strong>Offline tracking works:</strong> If your iPhone has no signal, other nearby Apple devices silently relay its location to Apple — privately and encrypted.</p></div></div>
+      <div class="step"><div class="step-num">🌍</div><div class="step-content"><p><strong>Works internationally:</strong> Find My works in every country as long as the phone has any connection or is near other Apple devices.</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="icon-box icon-orange">🛠️</div>
+      <div><div class="card-title">Troubleshooting</div><div class="card-sub">Common issues & fixes</div></div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">❓</div><div class="step-content"><p><strong>"Location Not Available"</strong> — Phone is off, in airplane mode, or battery is dead. Wait and check again.</p></div></div>
+      <div class="step"><div class="step-num">❓</div><div class="step-content"><p><strong>Location not updating</strong> — Make sure Location Services is set to "Always" for Find My. Toggle off/on in Settings.</p></div></div>
+      <div class="step"><div class="step-num">❓</div><div class="step-content"><p><strong>Device not showing in Find My</strong> — Confirm you're signed into the same Apple ID, and that Find My iPhone is toggled ON.</p></div></div>
+      <div class="step"><div class="step-num">❓</div><div class="step-content"><p><strong>Offline for hours</strong> — The phone may be in a dead zone. Check "Send Last Location" for the last GPS ping before it went offline.</p></div></div>
+      <div class="step"><div class="step-num">❓</div><div class="step-content"><p><strong>Location seems wrong</strong> — Indoor locations or areas with weak GPS may be imprecise. The blue accuracy circle shows the possible range.</p></div></div>
+    </div>
+  </div>
+  <div class="bottom-pad"></div>
+</div>
+
+<script>
+  function showSection(id, tab) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    tab.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>
 </body>
 </html>
-```
